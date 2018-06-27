@@ -1,93 +1,52 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import { User } from "./User";
-import { data } from "./data";
-
-interface Props {}
+import { InputView, InputViewOnButtonClickedHandler } from "./components/input/input-view";
+import { ListView, ListViewOnDeleteTaskHandler } from "./components/list/list-view";
+import { TaskItem } from "./contracts/TaskItem";
 
 interface State {
-  baseuserdata: User[];
-  userdata: User[];
+  itemData: TaskItem[];
 }
 
-class App extends React.Component<Props, State> {
-  constructor(props: Props) {
+class App extends React.Component<{}, State> {
+
+  constructor(props: {}) {
     super(props);
     this.state = {
-      baseuserdata: [],
-      userdata: []
+      itemData: []
     };
   }
 
-  public componentDidMount() {
-    this.setState({
-      userdata: data,
-      baseuserdata: data
+  private onButtonClick: InputViewOnButtonClickedHandler = itemValue => {
+    this.setState(state => {
+      const nextState: State = {
+        ...state
+      };
+
+      const newTaskItem: TaskItem = {
+        id: nextState.itemData.length,
+        text: itemValue,
+        done: false
+      };
+      nextState.itemData.push(newTaskItem);
+
+      return nextState;
     });
   }
 
-  protected setMaleFilter: React.MouseEventHandler<HTMLButtonElement> = () => {
-    this.setState({
-      userdata: this.state.baseuserdata.filter(x => x.gender === "Male")
-    });
-  };
-
-  protected setFemaleFilter: React.MouseEventHandler<
-    HTMLButtonElement
-  > = () => {
-    this.setState({
-      userdata: this.state.baseuserdata.filter(x => x.gender === "Female")
-    });
-  };
-  protected resetFilter: React.MouseEventHandler<HTMLButtonElement> = () => {
-    this.setState({
-      userdata: this.state.baseuserdata
-    });
-  };
-
-  protected setNameFilter: React.ChangeEventHandler<
-    HTMLInputElement
-  > = event => {
-    this.setState({
-      userdata: this.state.baseuserdata.filter(x =>
-        x.first_name !== null && undefined ? x.first_name.startsWith(event.target.value) : ""
-      )
-    });
-  };
+  private onDeleteClick: ListViewOnDeleteTaskHandler = id => {
+    console.log(id);
+  }
 
   public render(): JSX.Element {
     return (
       <div>
-        <button onClick={this.setMaleFilter}>Male</button>
-        <button onClick={this.setFemaleFilter}>Female</button>
-        <button onClick={this.resetFilter}>Reset</button>
-        <input onChange={this.setNameFilter} type="text" />
-        <table>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>First Name</th>
-              <th>Last Name</th>
-              <th>Email</th>
-              <th>Gender</th>
-              <th>IP Address</th>
-            </tr>
-          </thead>
-          <tbody>
-            {this.state.userdata.map((data, i) => {
-              return (
-                <tr key={i}>
-                  <td>{data.id}</td>
-                  <td>{data.first_name}</td>
-                  <td>{data.last_name}</td>
-                  <td>{data.email}</td>
-                  <td>{data.gender}</td>
-                  <td>{data.ip_address}</td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+        <div className="input">
+        <InputView onButtonClicked={this.onButtonClick}   />
+        </div>
+        <div className="list">
+          <ListView itemDataForList={this.state.itemData} onDeleteTask={this.onDeleteClick}/>
+        </div>
       </div>
     );
   }
