@@ -10,7 +10,6 @@ interface Props {
 
 interface State {
   itemData: TaskItem[];
-  currentid: number;
 }
 
 export class ListView extends React.Component<Props, State> {
@@ -19,12 +18,11 @@ export class ListView extends React.Component<Props, State> {
     super(props);
     this.state = {
       itemData: [],
-      currentid: 0
     };
   }
 
-  protected onDelete: React.MouseEventHandler<HTMLButtonElement> = event => {
-    this.props.onDeleteTask(this.state.currentid);
+  protected onDelete(event: React.MouseEvent<HTMLButtonElement>, currentid: number): void {
+    this.props.onDeleteTask(currentid);
   }
 
     public render(): JSX.Element {
@@ -46,7 +44,7 @@ export class ListView extends React.Component<Props, State> {
                 <tr key={`list-item-${i}`}>
                   <td>{data.id + 1}</td>
                   <td>{data.text}</td>
-                  <td><button onClick={this.onDelete}>X</button></td>
+                  <td><button onClick={event => this.onDelete (event, data.id) }>X</button></td>
                 </tr>
               )) : <div></div>
               }

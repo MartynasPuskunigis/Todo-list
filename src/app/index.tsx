@@ -6,6 +6,7 @@ import { TaskItem } from "./contracts/TaskItem";
 
 interface State {
   itemData: TaskItem[];
+  counter: number;
 }
 
 class App extends React.Component<{}, State> {
@@ -13,29 +14,32 @@ class App extends React.Component<{}, State> {
   constructor(props: {}) {
     super(props);
     this.state = {
-      itemData: []
+      itemData: [],
+      counter: 0
     };
   }
 
   private onButtonClick: InputViewOnButtonClickedHandler = itemValue => {
-    this.setState(state => {
+    this.setState((state, counter) => {
       const nextState: State = {
-        ...state
+        ...state,
+        ...counter
       };
-
       const newTaskItem: TaskItem = {
-        id: nextState.itemData.length,
+        id: this.state.counter,
         text: itemValue,
         done: false
       };
       nextState.itemData.push(newTaskItem);
-
+      nextState.counter = this.state.counter + 1;
       return nextState;
     });
   }
 
   private onDeleteClick: ListViewOnDeleteTaskHandler = id => {
-    console.log(id);
+    this.setState({
+      itemData: this.state.itemData.filter(item => item.id !== id)
+    });
   }
 
   public render(): JSX.Element {
