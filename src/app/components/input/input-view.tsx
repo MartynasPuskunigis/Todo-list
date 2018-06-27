@@ -1,7 +1,9 @@
 import * as React from "react";
 
+export type InputViewOnButtonClickedHandler = (itemValue: string) => void;
+
 interface Props {
-  onButtonClicked: (itemValue: string) => void;
+  onButtonClicked: InputViewOnButtonClickedHandler;
 }
 
 interface State {

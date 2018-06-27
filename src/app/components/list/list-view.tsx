@@ -38,9 +38,6 @@ export class ListView extends React.Component<Props, State> {
           <tbody>
             {this.props.itemDataForList !== undefined ? this.props.itemDataForList.map((data, i) =>
               (
-                // this.setState({
-                //   currentid: data.id
-                // }),
                 <tr key={`list-item-${i}`}>
                   <td>{data.id + 1}</td>
                   <td>{data.text}</td>

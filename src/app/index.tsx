@@ -46,7 +46,7 @@ class App extends React.Component<{}, State> {
     return (
       <div>
         <div className="input">
-        <InputView onButtonClicked={this.onButtonClick}   />
+        <InputView onButtonClicked={this.onButtonClick}/>
         </div>
         <div className="list">
           <ListView itemDataForList={this.state.itemData} onDeleteTask={this.onDeleteClick}/>
