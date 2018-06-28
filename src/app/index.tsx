@@ -13,6 +13,7 @@ import {
   ListViewOnCheckedTaskHandler
 } from "./components/list/list-view";
 import { TaskItem } from "./contracts/TaskItem";
+import "./index.css";
 
 interface State {
   baseitemData: TaskItem[];
