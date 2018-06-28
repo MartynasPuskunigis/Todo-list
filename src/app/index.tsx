@@ -154,4 +154,4 @@ class App extends React.Component<{}, State> {
   }
 }
 
-ReactDOM.render(<App />, document.getElementById("react-app"));
+ReactDOM.render(<App />, document.getElementById("app-root"));
