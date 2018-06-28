@@ -1,9 +1,11 @@
 import * as React from "react";
 
 export type InputViewOnButtonClickedHandler = (itemValue: string) => void;
+export type InputViewOnFilterButtonClickedHandler = (filtertype: string) => void;
 
 interface Props {
   onButtonClicked: InputViewOnButtonClickedHandler;
+  onFilterButtonClicked: InputViewOnFilterButtonClickedHandler;
 }
 
 interface State {
@@ -32,6 +34,34 @@ export class InputView extends React.Component<Props, State> {
       inputValue: ""
     });
   }
+  protected handleKeyboardPress: React.KeyboardEventHandler<
+    HTMLInputElement
+  > = event => {
+    if (event.key === "Enter") {
+      this.props.onButtonClicked(this.state.inputValue);
+      this.setState({
+        inputValue: ""
+      });
+    }
+  }
+
+  protected onUncompletedClick: React.MouseEventHandler<
+    HTMLButtonElement
+  > = event => {
+      this.props.onFilterButtonClicked("Uncompleted");
+  }
+
+  protected onCompletedClick: React.MouseEventHandler<
+    HTMLButtonElement
+  > = event => {
+      this.props.onFilterButtonClicked("Completed");
+  }
+
+  protected onShowAllClick: React.MouseEventHandler<
+    HTMLButtonElement
+  > = event => {
+      this.props.onFilterButtonClicked("ShowAll");
+  }
 
   public render(): JSX.Element {
     return (
@@ -39,6 +69,7 @@ export class InputView extends React.Component<Props, State> {
         <div className="textbox">
           <input
             onChange={this.handleChange}
+            onKeyPress={this.handleKeyboardPress}
             type="text"
             placeholder={"Type your task here"}
             name="textbox"
@@ -47,6 +78,11 @@ export class InputView extends React.Component<Props, State> {
         </div>
         <div className="submit">
           <button onClick={this.submitNewItem}>Submit</button>
+        </div>
+        <div className="filter-buttons">
+          <button onClick={this.onUncompletedClick}>Show only uncompleted</button>
+          <button onClick={this.onCompletedClick}>Show only completed</button>
+          <button onClick={this.onShowAllClick}>Show all</button>
         </div>
       </div>
     );
