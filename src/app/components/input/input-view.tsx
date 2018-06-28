@@ -14,13 +14,15 @@ interface Props {
 
 interface State {
   inputValue: string;
+  isErrorVisible: boolean;
 }
 
 export class InputView extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      inputValue: ""
+      inputValue: "",
+      isErrorVisible: false
     };
   }
   protected handleChange: React.ChangeEventHandler<
@@ -34,11 +36,14 @@ export class InputView extends React.Component<Props, State> {
     HTMLButtonElement
   > = event => {
     if (this.state.inputValue === "") {
-      alert("You didn't type anything!");
+      this.setState({
+        isErrorVisible: true
+      });
     } else {
       this.props.onButtonClicked(this.state.inputValue);
       this.setState({
-        inputValue: ""
+        inputValue: "",
+        isErrorVisible: false
       });
     }
   }
@@ -47,11 +52,14 @@ export class InputView extends React.Component<Props, State> {
   > = event => {
     if (event.key === "Enter") {
       if (this.state.inputValue === "") {
-        alert("You didn't type anything!");
+        this.setState({
+          isErrorVisible: true
+        });
       } else {
         this.props.onButtonClicked(this.state.inputValue);
         this.setState({
-          inputValue: ""
+          inputValue: "",
+          isErrorVisible: false
         });
       }
     }
@@ -75,22 +83,31 @@ export class InputView extends React.Component<Props, State> {
     this.props.onFilterButtonClicked("ShowAll");
   }
 
-  protected onDeleteAllClick: React.MouseEventHandler<HTMLButtonElement> = event => {
+  protected onDeleteAllClick: React.MouseEventHandler<
+    HTMLButtonElement
+  > = event => {
     this.props.onDeleteAllButtonClicked();
   }
 
   public render(): JSX.Element {
     return (
       <div>
-        <div className="textbox">
-          <input
-            onChange={this.handleChange}
-            onKeyPress={this.handleKeyboardPress}
-            type="text"
-            placeholder={"Type your task here"}
-            name="textbox"
-            value={this.state.inputValue}
-          />
+        <div className="input-space">
+          <div className="inputbox">
+            <input
+              onChange={this.handleChange}
+              onKeyPress={this.handleKeyboardPress}
+              type="text"
+              placeholder={"Type your task here"}
+              name="textbox"
+              value={this.state.inputValue}
+            />
+          </div>
+          {this.state.isErrorVisible ? (
+            <div className="error">You didn't type anything!</div>
+          ) : (
+            <div className="error" />
+          )}
         </div>
         <div className="submit">
           <button onClick={this.submitNewItem}>Submit</button>
@@ -99,15 +116,9 @@ export class InputView extends React.Component<Props, State> {
           <button onClick={this.onUncompletedClick}>
             Show only uncompleted
           </button>
-          <button onClick={this.onCompletedClick}>
-            Show only completed
-          </button>
-          <button onClick={this.onShowAllClick}>
-            Show all
-          </button>
-          <button onClick={this.onDeleteAllClick}>
-            Delete selected
-          </button>
+          <button onClick={this.onCompletedClick}>Show only completed</button>
+          <button onClick={this.onShowAllClick}>Show all</button>
+          <button onClick={this.onDeleteAllClick}>Delete selected</button>
         </div>
       </div>
     );
