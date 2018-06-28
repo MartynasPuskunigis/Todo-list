@@ -1,5 +1,5 @@
 import * as React from "react";
-//import "./input-view-styles.scss";
+import "./input-view-styles.css";
 
 export type InputViewOnButtonClickedHandler = (itemValue: string) => void;
 export type InputViewOnFilterButtonClickedHandler = (
@@ -99,7 +99,7 @@ export class InputView extends React.Component<Props, State> {
               onChange={this.handleChange}
               onKeyPress={this.handleKeyboardPress}
               type="text"
-              placeholder={"Type your task here"}
+              placeholder={"Add a task..."}
               name="textbox"
               value={this.state.inputValue}
             />

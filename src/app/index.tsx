@@ -132,7 +132,7 @@ class App extends React.Component<{}, State> {
   }
   public render(): JSX.Element {
     return (
-      <div>
+      <div className="wrapper">
         <div className="input">
           <InputView
             onButtonClicked={this.onButtonClick}

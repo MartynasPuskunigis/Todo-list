@@ -1,5 +1,6 @@
 import * as React from "react";
 import { TaskItem } from "../../contracts/TaskItem";
+import "./list-view-styles.css";
 
 export type ListViewOnDeleteTaskHandler = (id: number) => void;
 export type ListViewOnDoneTaskHandler = (id: number) => void;
@@ -35,7 +36,7 @@ export class ListView extends React.Component<Props, State> {
   }
 
   protected onDone(
-    event: React.MouseEvent<HTMLTableDataCellElement>,
+    event: React.MouseEvent<HTMLDivElement>,
     currentid: number
   ): void {
     this.props.onDoneTask(currentid);
@@ -51,8 +52,10 @@ export class ListView extends React.Component<Props, State> {
         ...state
       };
       isChecked === true
-      ? nextState.checkedItems.push(clickedId)
-      : nextState.checkedItems = nextState.checkedItems.filter(item => item !== clickedId);
+        ? nextState.checkedItems.push(clickedId)
+        : (nextState.checkedItems = nextState.checkedItems.filter(
+            item => item !== clickedId
+          ));
       this.props.onCheckedTask(nextState.checkedItems);
       return nextState;
     });
@@ -60,44 +63,45 @@ export class ListView extends React.Component<Props, State> {
   public render(): JSX.Element {
     return (
       <div>
-        <table>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Task</th>
-            </tr>
-          </thead>
-          <tbody>
+        <div className="Table">
+          <div className="TableBody">
             {this.props.itemDataForList !== undefined ? (
               this.props.itemDataForList.map((data, i) => (
-                <tr key={`list-item-${data.id}`}>
-                  <td>{data.id + 1}</td>
+                <div className="TableRow" key={`list-item-${data.id}`}>
+                  <div className="TableCellCheckbox">
+                    <input
+                      onClick={event => this.onCheckboxClicked(event, data.id)}
+                      type="checkbox"
+                    />
+                    <span className="checkmark"></span>
+                  </div>
                   {data.done === true ? (
-                    <td onClick={event => this.onDone(event, data.id)}>
+                    <div
+                      className="TableCellText"
+                      onClick={event => this.onDone(event, data.id)}
+                    >
                       <del>{data.text}</del>
-                    </td>
+                    </div>
                   ) : (
-                    <td onClick={event => this.onDone(event, data.id)}>
+                    <div
+                      className="TableCellText"
+                      onClick={event => this.onDone(event, data.id)}
+                    >
                       {data.text}
-                    </td>
+                    </div>
                   )}
-                  <td>
+                  <div className="TableCellDelete">
                     <button onClick={event => this.onDelete(event, data.id)}>
                       X
                     </button>
-                  </td>
-                  <td>
-                    <input onClick={event => this.onCheckboxClicked(event, data.id)} type="checkbox">
-
-                    </input>
-                  </td>
-                </tr>
+                  </div>
+                </div>
               ))
             ) : (
               <div />
             )}
-          </tbody>
-        </table>
+          </div>
+        </div>
       </div>
     );
   }
