@@ -1,11 +1,15 @@
 import * as React from "react";
 
 export type InputViewOnButtonClickedHandler = (itemValue: string) => void;
-export type InputViewOnFilterButtonClickedHandler = (filtertype: string) => void;
+export type InputViewOnFilterButtonClickedHandler = (
+  filtertype: string
+) => void;
+export type InputViewOnDeleteAllButtonClickedHandler = () => void;
 
 interface Props {
   onButtonClicked: InputViewOnButtonClickedHandler;
   onFilterButtonClicked: InputViewOnFilterButtonClickedHandler;
+  onDeleteAllButtonClicked: InputViewOnDeleteAllButtonClickedHandler;
 }
 
 interface State {
@@ -29,38 +33,50 @@ export class InputView extends React.Component<Props, State> {
   protected submitNewItem: React.MouseEventHandler<
     HTMLButtonElement
   > = event => {
-    this.props.onButtonClicked(this.state.inputValue);
-    this.setState({
-      inputValue: ""
-    });
-  }
-  protected handleKeyboardPress: React.KeyboardEventHandler<
-    HTMLInputElement
-  > = event => {
-    if (event.key === "Enter") {
+    if (this.state.inputValue === "") {
+      alert("You didn't type anything!");
+    } else {
       this.props.onButtonClicked(this.state.inputValue);
       this.setState({
         inputValue: ""
       });
     }
   }
+  protected handleKeyboardPress: React.KeyboardEventHandler<
+    HTMLInputElement
+  > = event => {
+    if (event.key === "Enter") {
+      if (this.state.inputValue === "") {
+        alert("You didn't type anything!");
+      } else {
+        this.props.onButtonClicked(this.state.inputValue);
+        this.setState({
+          inputValue: ""
+        });
+      }
+    }
+  }
 
   protected onUncompletedClick: React.MouseEventHandler<
     HTMLButtonElement
   > = event => {
-      this.props.onFilterButtonClicked("Uncompleted");
+    this.props.onFilterButtonClicked("Uncompleted");
   }
 
   protected onCompletedClick: React.MouseEventHandler<
     HTMLButtonElement
   > = event => {
-      this.props.onFilterButtonClicked("Completed");
+    this.props.onFilterButtonClicked("Completed");
   }
 
   protected onShowAllClick: React.MouseEventHandler<
     HTMLButtonElement
   > = event => {
-      this.props.onFilterButtonClicked("ShowAll");
+    this.props.onFilterButtonClicked("ShowAll");
+  }
+
+  protected onDeleteAllClick: React.MouseEventHandler<HTMLButtonElement> = event => {
+    this.props.onDeleteAllButtonClicked();
   }
 
   public render(): JSX.Element {
@@ -80,9 +96,18 @@ export class InputView extends React.Component<Props, State> {
           <button onClick={this.submitNewItem}>Submit</button>
         </div>
         <div className="filter-buttons">
-          <button onClick={this.onUncompletedClick}>Show only uncompleted</button>
-          <button onClick={this.onCompletedClick}>Show only completed</button>
-          <button onClick={this.onShowAllClick}>Show all</button>
+          <button onClick={this.onUncompletedClick}>
+            Show only uncompleted
+          </button>
+          <button onClick={this.onCompletedClick}>
+            Show only completed
+          </button>
+          <button onClick={this.onShowAllClick}>
+            Show all
+          </button>
+          <button onClick={this.onDeleteAllClick}>
+            Delete selected
+          </button>
         </div>
       </div>
     );

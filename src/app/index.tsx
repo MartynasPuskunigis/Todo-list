@@ -3,12 +3,14 @@ import * as ReactDOM from "react-dom";
 import {
   InputView,
   InputViewOnButtonClickedHandler,
-  InputViewOnFilterButtonClickedHandler
+  InputViewOnFilterButtonClickedHandler,
+  InputViewOnDeleteAllButtonClickedHandler
 } from "./components/input/input-view";
 import {
   ListView,
   ListViewOnDeleteTaskHandler,
-  ListViewOnDoneTaskHandler
+  ListViewOnDoneTaskHandler,
+  ListViewOnCheckedTaskHandler
 } from "./components/list/list-view";
 import { TaskItem } from "./contracts/TaskItem";
 
@@ -17,6 +19,7 @@ interface State {
   filteredItemData: TaskItem[];
   counter: number;
   filtertype: string;
+  checkedIds: number[];
 }
 
 class App extends React.Component<{}, State> {
@@ -26,7 +29,8 @@ class App extends React.Component<{}, State> {
       baseitemData: [],
       filteredItemData: [],
       counter: 0,
-      filtertype: "ShowAll"
+      filtertype: "ShowAll",
+      checkedIds: []
     };
   }
 
@@ -102,6 +106,29 @@ class App extends React.Component<{}, State> {
       return nextState;
     });
   }
+  private onDeleteAllClick: InputViewOnDeleteAllButtonClickedHandler = () => {
+    this.setState(state => {
+      const nextState: State = {
+        ...state
+      };
+      nextState.baseitemData = nextState.baseitemData.filter(task => {
+        for (let i = 0; i < nextState.baseitemData.length; i++) {
+          if (nextState.checkedIds.indexOf(task.id) === -1) {
+            nextState.checkedIds = nextState.checkedIds.filter(item => item !== task.id);
+            return true;
+          }
+        }
+      });
+      return nextState;
+    });
+    this.filterList();
+  }
+
+  private updateCheckedTasks: ListViewOnCheckedTaskHandler = newCheckedTasks => {
+    this.setState({
+      checkedIds: newCheckedTasks
+    });
+  }
   public render(): JSX.Element {
     return (
       <div>
@@ -109,6 +136,7 @@ class App extends React.Component<{}, State> {
           <InputView
             onButtonClicked={this.onButtonClick}
             onFilterButtonClicked={this.onFilterClick}
+            onDeleteAllButtonClicked={this.onDeleteAllClick}
           />
         </div>
         <div className="list">
@@ -116,6 +144,8 @@ class App extends React.Component<{}, State> {
             itemDataForList={this.state.filteredItemData}
             onDeleteTask={this.onDeleteClick}
             onDoneTask={this.onDoneClick}
+            onCheckedTask={this.updateCheckedTasks}
+            newCheckedTasks={this.state.checkedIds}
           />
         </div>
       </div>
