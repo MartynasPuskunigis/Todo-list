@@ -57,14 +57,14 @@ class App extends React.Component<{}, State> {
             return nextState;
         });
         this.filterList();
-    }
+    };
 
     private onDeleteClick: ListViewOnDeleteTaskHandler = id => {
         this.setState({
             baseItemData: this.state.baseItemData.filter(item => item.id !== id)
         });
         this.filterList();
-    }
+    };
 
     private onDoneClick: ListViewOnDoneTaskHandler = id => {
         this.setState(state => {
@@ -81,14 +81,14 @@ class App extends React.Component<{}, State> {
             return nextState;
         });
         this.filterList();
-    }
+    };
 
     private onFilterClick: InputViewOnFilterButtonClickedHandler = newfiltertype => {
         this.setState({
             filtertype: newfiltertype
         });
         this.filterList();
-    }
+    };
 
     private filterList(): void {
         this.setState(state => {
@@ -126,13 +126,13 @@ class App extends React.Component<{}, State> {
             return nextState;
         });
         this.filterList();
-    }
+    };
 
     private updateCheckedTasks: ListViewOnCheckedTaskHandler = newCheckedTasks => {
         this.setState({
             finishedTasksIds: newCheckedTasks
         });
-    }
+    };
     public render(): JSX.Element {
         return (
             <div className="wrapper">
