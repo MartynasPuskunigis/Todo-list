@@ -64,7 +64,7 @@ export class ListView extends React.Component<Props, State> {
   }
   public render(): JSX.Element {
     return (
-      <div>
+      <div className="wrapper">
         <div className="Table">
           <div className="TableBody">
             {this.props.itemDataForList !== undefined ? (

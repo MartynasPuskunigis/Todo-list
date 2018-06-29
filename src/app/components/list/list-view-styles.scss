@@ -1,38 +1,41 @@
-.Table{
-	display: table;
+.Table {
+  display: table;
 
-    .TableBody {
-        display: table-row-group;
+  .TableBody {
+    display: table-row-group;
 
-        .TableRow {
-            border-spacing: 10px;
+    .TableRow {
+      border-spacing: 10px;
 
-            .TableCellText {
-                display: table-cell;
-                white-space: pre-wrap;
-                white-space: -moz-pre-wrap;
-                white-space: -o-pre-wrap;   
-                word-wrap: break-word; 
-                max-width: 200px;
-                width: 200px;
-            }
-            .TableCellCheckbox {
-                display: table-cell;
-                padding-right: 30px;
+      .TableCellText {
+        display: table-cell;
+        white-space: pre-wrap;
+        white-space: -moz-pre-wrap;
+        white-space: -o-pre-wrap;
+        word-wrap: break-word;
+        max-width: 200px;
+        width: 200px;
+        color: #ffffff;
+      }
+      .TableCellCheckbox {
+        display: table-cell;
+        padding-right: 30px;
 
-                input {
-                    cursor: pointer;
-                }
-                
-            }
-            .TableCellDelete {
-                display: table-cell;
-                padding-left: 30px;
-                
-                button {
-                    cursor: pointer;
-                }
-            }
+        input {
+          cursor: pointer;
         }
+      }
+      .TableCellDelete {
+        display: table-cell;
+        padding-left: 30px;
+
+        button {
+          cursor: pointer;
+          background: none repeat scroll 0 0 transparent;
+          border: none;
+          font-size: 16px;
+        }
+      }
     }
+  }
 }

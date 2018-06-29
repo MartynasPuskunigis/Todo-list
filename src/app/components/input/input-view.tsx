@@ -102,7 +102,7 @@ export class InputView extends React.Component<Props, State> {
 
   public render(): JSX.Element {
     return (
-      <div>
+      <div className="wrapper">
         <div className="input-space">
           <div className="inputbox">
             <input
