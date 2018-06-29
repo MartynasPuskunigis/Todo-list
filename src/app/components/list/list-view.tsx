@@ -44,9 +44,11 @@ export class ListView extends React.Component<Props, State> {
             const nextState: State = {
                 ...state
             };
-            isChecked === true
-                ? nextState.checkedItems.push(clickedId)
-                : (nextState.checkedItems = nextState.checkedItems.filter(item => item !== clickedId));
+            if (isChecked) {
+                nextState.checkedItems.push(clickedId);
+            } else {
+                nextState.checkedItems = nextState.checkedItems.filter(item => item !== clickedId);
+            }
             this.props.onCheckedTask(nextState.checkedItems);
             return nextState;
         });
@@ -61,9 +63,8 @@ export class ListView extends React.Component<Props, State> {
                                 <div className="TableRow" key={`list-item-${data.id}`}>
                                     <div className="TableCellCheckbox">
                                         <input onClick={event => this.onCheckboxClicked(event, data.id)} type="checkbox" />
-                                        <span className="checkmark" />
                                     </div>
-                                    {data.isDone === true ? (
+                                    {data.isDone ? (
                                         <div className="TableCellText" onClick={event => this.onDone(event, data.id)}>
                                             <del>{data.text}</del>
                                         </div>

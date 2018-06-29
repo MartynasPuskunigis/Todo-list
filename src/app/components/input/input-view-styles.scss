@@ -1,28 +1,78 @@
 .input {
-  .wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    .wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
 
-    .input-space {
-      padding-bottom: 10px;
+        .input-space {
+            padding-bottom: 10px;
 
-      .input-box {
-        input {
-          background-color: #343a40;
-          border: none;
-          border-radius: 2px;
-          outline: none;
+            .inputbox {
+                input {
+                    background-color: #343a40;
+                    border: none;
+                    border-radius: 2px;
+                    outline: none;
+                }
+            }
         }
-      }
-    }
 
-    .filter-buttons {
-        padding-bottom: 10px;
-    }
+        .filter-buttons {
+            padding-bottom: 4px;
+            border-bottom: 2px solid black;
 
-    .submit {
-        padding-bottom: 10px;
+            button {
+                background-color: #3c424a;
+                border: none;
+                color: grey;
+                text-align: center;
+                font-size: 14px;
+                padding: 5px 4px;
+                transition: 0.4s;
+                outline: none;
+                cursor: pointer;
+                font-weight: bold;
+                padding-right: 20px;
+            }
+            button:hover {
+            }
+        }
+
+        .submit {
+            padding-bottom: 10px;
+
+            button {
+                cursor: pointer;
+                background: none repeat scroll 0 0 transparent;
+                border: none;
+                font-size: 16px;
+                text-align: center;
+                color: #ffffff;
+                background-color: #f4511e;
+                padding: 20px;
+
+                span {
+                    cursor: pointer;
+                    display: inline-block;
+                    position: relative;
+                    transition: 0.5s;
+                }
+                span:after {
+                    content: "\00bb";
+                    position: absolute;
+                    opacity: 0;
+                    top: 0;
+                    right: -20px;
+                    transition: 0.5s;
+                }
+                button:hover span {
+                    padding-right: 25px;
+                }
+                button:hover span:after {
+                    opacity: 1;
+                    right: 0;
+                }
+            }
+        }
     }
-  }
 }

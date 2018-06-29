@@ -1,5 +1,4 @@
 import * as React from "react";
-
 import * as ReactDOM from "react-dom";
 
 import {
@@ -42,28 +41,33 @@ class App extends React.Component<{}, State> {
     }
 
     private onButtonClick: InputViewOnButtonClickedHandler = itemValue => {
-        this.setState((state, counter) => {
+        this.setState(state => {
             const nextState: State = {
-                ...state,
-                ...counter
+                ...state
             };
+
             const newTaskItem: TaskItem = {
                 id: this.state.taskIdCounter,
                 text: itemValue,
                 isDone: false
             };
+
             nextState.baseItemData.push(newTaskItem);
             nextState.taskIdCounter = this.state.taskIdCounter + 1;
-            return nextState;
+            return App.calculateState(nextState);
         });
-        this.filterList();
     };
 
     private onDeleteClick: ListViewOnDeleteTaskHandler = id => {
-        this.setState({
-            baseItemData: this.state.baseItemData.filter(item => item.id !== id)
+        this.setState(state => {
+            const nextState: State = {
+                ...state
+            };
+
+            nextState.baseItemData = this.state.baseItemData.filter(item => item.id !== id);
+
+            return App.calculateState(nextState);
         });
-        this.filterList();
     };
 
     private onDoneClick: ListViewOnDoneTaskHandler = id => {
@@ -73,47 +77,49 @@ class App extends React.Component<{}, State> {
             };
             for (let i: number = 0; i < nextState.baseItemData.length; i++) {
                 if (nextState.baseItemData[i].id === id) {
-                    nextState.baseItemData[i].isDone === false
-                        ? (nextState.baseItemData[i].isDone = true)
-                        : (nextState.baseItemData[i].isDone = false);
+                    nextState.baseItemData[i].isDone = !nextState.baseItemData[i].isDone;
                 }
             }
-            return nextState;
+            return App.calculateState(nextState);
         });
-        this.filterList();
     };
 
     private onFilterClick: InputViewOnFilterButtonClickedHandler = newfiltertype => {
-        this.setState({
-            filtertype: newfiltertype
-        });
-        this.filterList();
-    };
-
-    private filterList(): void {
         this.setState(state => {
             const nextState: State = {
                 ...state
             };
-            switch (nextState.filtertype) {
-                case 2:
-                    nextState.filteredItemData = nextState.baseItemData.filter(item => item.isDone !== true);
-                    break;
-                case 3:
-                    nextState.filteredItemData = nextState.baseItemData.filter(item => item.isDone !== false);
-                    break;
-                case 1:
-                    nextState.filteredItemData = nextState.baseItemData;
-                    break;
-            }
-            return nextState;
+
+            nextState.filtertype = newfiltertype;
+
+            return App.calculateState(nextState);
         });
+    };
+
+    protected static calculateState(state: State): State {
+        switch (state.filtertype) {
+            case Filter.Uncompleted: {
+                state.filteredItemData = state.baseItemData.filter(item => item.isDone !== true);
+                break;
+            }
+            case Filter.Completed: {
+                state.filteredItemData = state.baseItemData.filter(item => item.isDone !== false);
+                break;
+            }
+            case Filter.ShowAll: {
+                state.filteredItemData = state.baseItemData;
+                break;
+            }
+        }
+        return state;
     }
+
     private onDeleteAllClick: InputViewOnDeleteAllButtonClickedHandler = () => {
         this.setState(state => {
             const nextState: State = {
                 ...state
             };
+
             nextState.baseItemData = nextState.baseItemData.filter(task => {
                 for (let i = 0; i < nextState.baseItemData.length; i++) {
                     if (nextState.finishedTasksIds.indexOf(task.id) === -1) {
@@ -123,9 +129,9 @@ class App extends React.Component<{}, State> {
                 }
                 return;
             });
-            return nextState;
+
+            return App.calculateState(nextState);
         });
-        this.filterList();
     };
 
     private updateCheckedTasks: ListViewOnCheckedTaskHandler = newCheckedTasks => {

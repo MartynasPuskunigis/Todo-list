@@ -6,9 +6,9 @@ export type InputViewOnFilterButtonClickedHandler = (filtertype: Filter) => void
 export type InputViewOnDeleteAllButtonClickedHandler = () => void;
 
 export enum Filter {
-    "ShowAll" = 1,
-    "Uncompleted" = 2,
-    "Completed" = 3
+    ShowAll,
+    Uncompleted,
+    Completed
 }
 
 interface Props {
@@ -98,10 +98,10 @@ export class InputView extends React.Component<Props, State> {
                             value={this.state.inputValue}
                         />
                     </div>
-                    {this.state.isErrorVisible ? <div className="error">You didn't type anything!</div> : <div className="error" />}
+                    {this.state.isErrorVisible ? <div className="error">You didn't type anything!</div> : null}
                 </div>
                 <div className="submit">
-                    <button onClick={this.submitNewItem}>Submit</button>
+                    <button onClick={this.submitNewItem}><span>Submit</span></button>
                 </div>
                 <div className="filter-buttons">
                     <button onClick={this.onUncompletedClick}>Show only uncompleted</button>
