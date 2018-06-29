@@ -1,37 +1,43 @@
 import * as React from "react";
+
 import * as ReactDOM from "react-dom";
+
 import {
   InputView,
   InputViewOnButtonClickedHandler,
   InputViewOnFilterButtonClickedHandler,
-  InputViewOnDeleteAllButtonClickedHandler
+  InputViewOnDeleteAllButtonClickedHandler,
+  Filter
 } from "./components/input/input-view";
+
 import {
   ListView,
   ListViewOnDeleteTaskHandler,
   ListViewOnDoneTaskHandler,
   ListViewOnCheckedTaskHandler
 } from "./components/list/list-view";
+
 import { TaskItem } from "./contracts/TaskItem";
+
 import "./index.css";
 
 interface State {
-  baseitemData: TaskItem[];
+  baseItemData: TaskItem[];
   filteredItemData: TaskItem[];
-  counter: number;
-  filtertype: string;
-  checkedIds: number[];
+  taskIdCounter: number;
+  filtertype: Filter;
+  finishedTasksIds: number[];
 }
 
 class App extends React.Component<{}, State> {
   constructor(props: {}) {
     super(props);
     this.state = {
-      baseitemData: [],
+      baseItemData: [],
       filteredItemData: [],
-      counter: 0,
-      filtertype: "ShowAll",
-      checkedIds: []
+      taskIdCounter: 0,
+      filtertype: Filter.ShowAll,
+      finishedTasksIds: []
     };
   }
 
@@ -42,12 +48,12 @@ class App extends React.Component<{}, State> {
         ...counter
       };
       const newTaskItem: TaskItem = {
-        id: this.state.counter,
+        id: this.state.taskIdCounter,
         text: itemValue,
-        done: false
+        isDone: false
       };
-      nextState.baseitemData.push(newTaskItem);
-      nextState.counter = this.state.counter + 1;
+      nextState.baseItemData.push(newTaskItem);
+      nextState.taskIdCounter = this.state.taskIdCounter + 1;
       return nextState;
     });
     this.filterList();
@@ -55,7 +61,7 @@ class App extends React.Component<{}, State> {
 
   private onDeleteClick: ListViewOnDeleteTaskHandler = id => {
     this.setState({
-      baseitemData: this.state.baseitemData.filter(item => item.id !== id)
+      baseItemData: this.state.baseItemData.filter(item => item.id !== id)
     });
     this.filterList();
   }
@@ -65,11 +71,11 @@ class App extends React.Component<{}, State> {
       const nextState: State = {
         ...state
       };
-      for (let i: number = 0; i < nextState.baseitemData.length; i++) {
-        if (nextState.baseitemData[i].id === id) {
-          nextState.baseitemData[i].done === false
-            ? (nextState.baseitemData[i].done = true)
-            : (nextState.baseitemData[i].done = false);
+      for (let i: number = 0; i < nextState.baseItemData.length; i++) {
+        if (nextState.baseItemData[i].id === id) {
+          nextState.baseItemData[i].isDone === false
+            ? (nextState.baseItemData[i].isDone = true)
+            : (nextState.baseItemData[i].isDone = false);
         }
       }
       return nextState;
@@ -90,18 +96,18 @@ class App extends React.Component<{}, State> {
         ...state
       };
       switch (nextState.filtertype) {
-        case "Uncompleted":
-          nextState.filteredItemData = nextState.baseitemData.filter(
-            item => item.done !== true
+        case 2:
+          nextState.filteredItemData = nextState.baseItemData.filter(
+            item => item.isDone !== true
           );
           break;
-        case "Completed":
-          nextState.filteredItemData = nextState.baseitemData.filter(
-            item => item.done !== false
+        case 3:
+          nextState.filteredItemData = nextState.baseItemData.filter(
+            item => item.isDone !== false
           );
           break;
-        case "ShowAll":
-          nextState.filteredItemData = nextState.baseitemData;
+        case 1:
+          nextState.filteredItemData = nextState.baseItemData;
           break;
       }
       return nextState;
@@ -112,13 +118,16 @@ class App extends React.Component<{}, State> {
       const nextState: State = {
         ...state
       };
-      nextState.baseitemData = nextState.baseitemData.filter(task => {
-        for (let i = 0; i < nextState.baseitemData.length; i++) {
-          if (nextState.checkedIds.indexOf(task.id) === -1) {
-            nextState.checkedIds = nextState.checkedIds.filter(item => item !== task.id);
+      nextState.baseItemData = nextState.baseItemData.filter(task => {
+        for (let i = 0; i < nextState.baseItemData.length; i++) {
+          if (nextState.finishedTasksIds.indexOf(task.id) === -1) {
+            nextState.finishedTasksIds = nextState.finishedTasksIds.filter(
+              item => item !== task.id
+            );
             return true;
           }
         }
+        return;
       });
       return nextState;
     });
@@ -127,7 +136,7 @@ class App extends React.Component<{}, State> {
 
   private updateCheckedTasks: ListViewOnCheckedTaskHandler = newCheckedTasks => {
     this.setState({
-      checkedIds: newCheckedTasks
+      finishedTasksIds: newCheckedTasks
     });
   }
   public render(): JSX.Element {
@@ -146,7 +155,7 @@ class App extends React.Component<{}, State> {
             onDeleteTask={this.onDeleteClick}
             onDoneTask={this.onDoneClick}
             onCheckedTask={this.updateCheckedTasks}
-            newCheckedTasks={this.state.checkedIds}
+            newCheckedTasks={this.state.finishedTasksIds}
           />
         </div>
       </div>

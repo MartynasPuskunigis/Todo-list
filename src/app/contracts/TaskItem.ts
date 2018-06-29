@@ -1,5 +1,5 @@
 export interface TaskItem {
     id: number;
     text: string;
-    done: boolean;
+    isDone: boolean;
 }

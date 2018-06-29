@@ -3,9 +3,15 @@ import "./input-view-styles.css";
 
 export type InputViewOnButtonClickedHandler = (itemValue: string) => void;
 export type InputViewOnFilterButtonClickedHandler = (
-  filtertype: string
+  filtertype: Filter
 ) => void;
 export type InputViewOnDeleteAllButtonClickedHandler = () => void;
+
+export enum Filter {
+  "ShowAll" = 1,
+  "Uncompleted" = 2,
+  "Completed" = 3,
+}
 
 interface Props {
   onButtonClicked: InputViewOnButtonClickedHandler;
@@ -33,14 +39,35 @@ export class InputView extends React.Component<Props, State> {
       inputValue: event.target.value
     });
   }
-  protected submitNewItem: React.MouseEventHandler<
-    HTMLButtonElement
-  > = event => {
-    if (this.state.inputValue === "") {
+
+  protected isInputEmpty(inputValue: string): boolean {
+    if (inputValue === "") {
       this.setState({
         isErrorVisible: true
       });
-    } else {
+      return true;
+    }
+    return false;
+  }
+  protected submitNewItem: React.MouseEventHandler<
+    HTMLButtonElement
+  > = event => {
+    if (this.isInputEmpty(this.state.inputValue)) {
+     return;
+    }
+    this.props.onButtonClicked(this.state.inputValue);
+    return this.setState({
+      inputValue: "",
+      isErrorVisible: false
+    });
+  }
+  protected handleKeyboardPress: React.KeyboardEventHandler<
+    HTMLInputElement
+  > = event => {
+    if (event.key === "Enter") {
+      if (this.isInputEmpty(this.state.inputValue)) {
+        return;
+        }
       this.props.onButtonClicked(this.state.inputValue);
       this.setState({
         inputValue: "",
@@ -48,40 +75,23 @@ export class InputView extends React.Component<Props, State> {
       });
     }
   }
-  protected handleKeyboardPress: React.KeyboardEventHandler<
-    HTMLInputElement
-  > = event => {
-    if (event.key === "Enter") {
-      if (this.state.inputValue === "") {
-        this.setState({
-          isErrorVisible: true
-        });
-      } else {
-        this.props.onButtonClicked(this.state.inputValue);
-        this.setState({
-          inputValue: "",
-          isErrorVisible: false
-        });
-      }
-    }
-  }
 
   protected onUncompletedClick: React.MouseEventHandler<
     HTMLButtonElement
   > = event => {
-    this.props.onFilterButtonClicked("Uncompleted");
+    this.props.onFilterButtonClicked(Filter.Uncompleted);
   }
 
   protected onCompletedClick: React.MouseEventHandler<
     HTMLButtonElement
   > = event => {
-    this.props.onFilterButtonClicked("Completed");
+    this.props.onFilterButtonClicked(Filter.Completed);
   }
 
   protected onShowAllClick: React.MouseEventHandler<
     HTMLButtonElement
   > = event => {
-    this.props.onFilterButtonClicked("ShowAll");
+    this.props.onFilterButtonClicked(Filter.ShowAll);
   }
 
   protected onDeleteAllClick: React.MouseEventHandler<
@@ -99,7 +109,7 @@ export class InputView extends React.Component<Props, State> {
               onChange={this.handleChange}
               onKeyPress={this.handleKeyboardPress}
               type="text"
-              placeholder={"Add a task..."}
+              placeholder="Add a task..."
               name="textbox"
               value={this.state.inputValue}
             />

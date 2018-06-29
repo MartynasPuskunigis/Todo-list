@@ -1,5 +1,7 @@
 import * as React from "react";
+
 import { TaskItem } from "../../contracts/TaskItem";
+
 import "./list-view-styles.css";
 
 export type ListViewOnDeleteTaskHandler = (id: number) => void;
@@ -73,9 +75,9 @@ export class ListView extends React.Component<Props, State> {
                       onClick={event => this.onCheckboxClicked(event, data.id)}
                       type="checkbox"
                     />
-                    <span className="checkmark"></span>
+                    <span className="checkmark" />
                   </div>
-                  {data.done === true ? (
+                  {data.isDone === true ? (
                     <div
                       className="TableCellText"
                       onClick={event => this.onDone(event, data.id)}
@@ -91,9 +93,10 @@ export class ListView extends React.Component<Props, State> {
                     </div>
                   )}
                   <div className="TableCellDelete">
-                    <button onClick={event => this.onDelete(event, data.id)}>
-                      X
-                    </button>
+                    <button
+                      className="far fa-trash-alt"
+                      onClick={event => this.onDelete(event, data.id)}
+                    />
                   </div>
                 </div>
               ))
