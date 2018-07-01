@@ -1,0 +1,89 @@
+.input {
+    .wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        .input-space {
+            padding-bottom: 10px;
+
+            .inputbox {
+                input {
+                    background-color: #343a40;
+                    border: none;
+                    border-radius: 8px;
+                    outline: none;
+                    color: white;
+                    width: 500px;
+                    font-size: 24px;
+                    padding-left: 10px;
+                }
+            }
+            @media screen and (max-width: 500px) {
+                .inputbox {
+                    input {
+                        width: 300px;
+                    }
+                }
+            }
+            .error {
+                color: red;
+                font-weight: bold;
+                font-style: italic;
+            }
+        }
+
+        .filter-buttons {
+            padding-bottom: 4px;
+            border-bottom: 2px solid black;
+            width: 600px;
+            min-height: 30px;
+            max-height: 100px;
+            display: flex;
+            justify-content: space-between;
+
+            @media screen and (max-width: 600px) {
+                flex-direction: column;
+            }
+
+            button {
+                background-color: #3c424a;
+                border: none;
+                color: grey;
+                text-align: center;
+                font-size: 14px;
+                padding: 5px 4px;
+                transition: 0.4s;
+                outline: none;
+                cursor: pointer;
+                font-weight: bold;
+            }
+            button:hover {
+                color: white;
+                border-bottom: 2px solid #f4511e;
+            }
+        }
+
+        .submit {
+            padding-bottom: 10px;
+
+            button {
+                cursor: pointer;
+                background: none repeat scroll 0 0 transparent;
+                border: none;
+                font-size: 16px;
+                text-align: center;
+                color: #ffffff;
+                background-color: #f4511e;
+                padding: 20px;
+                border-radius: 8px;
+                opacity: 0.6;
+                transition: 0.4s;
+                outline: none;
+            }
+            button:hover {
+                opacity: 1;
+            }
+        }
+    }
+}

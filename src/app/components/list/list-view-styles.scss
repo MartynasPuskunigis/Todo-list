@@ -1,0 +1,50 @@
+.Table {
+  display: table;
+
+  .TableBody {
+    display: table-row-group;
+
+    .TableRow {
+      padding: 20px;
+      min-height: 30px;
+      display: flex;
+      align-items: center;
+      width: 350px;
+
+      .TableCellText {
+        display: table-cell;
+        white-space: pre-wrap;
+        white-space: -moz-pre-wrap;
+        white-space: -o-pre-wrap;
+        word-wrap: break-word;
+        min-width: 250px;
+        max-width: 250px;
+        color: #ffffff;
+        cursor: pointer;
+      }
+      .TableCellCheckbox {
+        display: table-cell;
+        padding-right: 30px;
+
+        input {
+          cursor: pointer;
+        }
+      }
+      .TableCellDelete {
+        display: table-cell;
+        padding-left: 30px;
+
+        button {
+          cursor: pointer;
+          background: none repeat scroll 0 0 transparent;
+          border: none;
+          font-size: 24px;
+          outline: none;
+        }
+        button:hover {
+          font-size: 28px;
+        }
+      }
+    }
+  }
+}
