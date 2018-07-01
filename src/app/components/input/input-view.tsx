@@ -101,7 +101,7 @@ export class InputView extends React.Component<Props, State> {
                     {this.state.isErrorVisible ? <div className="error">You didn't type anything!</div> : null}
                 </div>
                 <div className="submit">
-                    <button onClick={this.submitNewItem}><span>Submit</span></button>
+                    <button onClick={this.submitNewItem}>Submit</button>
                 </div>
                 <div className="filter-buttons">
                     <button onClick={this.onUncompletedClick}>Show only uncompleted</button>

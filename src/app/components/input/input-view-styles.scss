@@ -19,6 +19,13 @@
                     padding-left: 10px;
                 }
             }
+            @media screen and (max-width: 500px) {
+                .inputbox {
+                    input {
+                        width: 300px;
+                    }
+                }
+            }
             .error {
                 color: red;
                 font-weight: bold;
@@ -30,9 +37,14 @@
             padding-bottom: 4px;
             border-bottom: 2px solid black;
             width: 600px;
+            min-height: 30px;
+            max-height: 100px;
             display: flex;
             justify-content: space-between;
-            height: 30px;
+
+            @media screen and (max-width: 600px) {
+                flex-direction: column;
+            }
 
             button {
                 background-color: #3c424a;
@@ -66,7 +78,8 @@
                 padding: 20px;
                 border-radius: 8px;
                 opacity: 0.6;
-                transition: 0.4s
+                transition: 0.4s;
+                outline: none;
             }
             button:hover {
                 opacity: 1;
