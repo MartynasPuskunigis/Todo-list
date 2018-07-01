@@ -5,7 +5,11 @@
     display: table-row-group;
 
     .TableRow {
-      border-spacing: 10px;
+      padding: 20px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      width: 350px;
 
       .TableCellText {
         display: table-cell;
@@ -13,8 +17,8 @@
         white-space: -moz-pre-wrap;
         white-space: -o-pre-wrap;
         word-wrap: break-word;
-        max-width: 200px;
-        width: 200px;
+        max-width: 250px;
+        width: 250px;
         color: #ffffff;
       }
       .TableCellCheckbox {
@@ -34,6 +38,10 @@
           background: none repeat scroll 0 0 transparent;
           border: none;
           font-size: 16px;
+          outline: none;
+        }
+        button:hover {
+          font-size: 24px;
         }
       }
     }

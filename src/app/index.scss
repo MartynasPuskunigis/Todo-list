@@ -2,7 +2,7 @@
 
 main {
   display: flex;
-  align-items: center;
+  justify-content: center;
   .wrapper {
     width: 768px;
     display: flex;
@@ -10,8 +10,13 @@ main {
     align-items: center;
     background-color: #3c424a;
     padding-top: 10px;
+    border-radius: 8px;
     .header {
       font-size: 24px;
+      color: white;
+      font-weight: bold;
+      padding-top: 30px;
+      padding-bottom: 30px;
     }
   }
 }
