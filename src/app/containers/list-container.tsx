@@ -17,7 +17,7 @@ class TodoContainerClass extends React.Component<{}, State> {
 
     public static calculateState(state: State): State {
         return {
-            tasks: TodoReduceStore.getState().allTasks
+            tasks: TodoReduceStore.getState().tasksToShow
         };
     }
 

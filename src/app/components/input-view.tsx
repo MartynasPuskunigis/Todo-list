@@ -2,6 +2,12 @@ import * as React from "react";
 
 import { TodoActionsCreators } from "./../actions/todo-actions-creators";
 
+export enum Filter {
+    ShowAll,
+    Uncompleted,
+    Completed
+}
+
 interface State {
     currentInputValue: string;
 }
@@ -46,6 +52,10 @@ export class InputView extends React.Component<{}, State> {
         }
     };
 
+    protected onFilterClick(event: React.MouseEvent<HTMLButtonElement>, filtertype: Filter): void {
+        TodoActionsCreators.filterClicked(filtertype);
+    }
+
     public render(): JSX.Element {
         return (
             <div>
@@ -60,10 +70,10 @@ export class InputView extends React.Component<{}, State> {
                 <div>
                     <button onClick={this.onSubmitClick}>Submit</button>
                     <div>
-                        <button>Show only completed</button>
-                        <button>Show only uncompleted</button>
-                        <button>Show all</button>
-                        </div>
+                        <button onClick={event => this.onFilterClick(event, Filter.Completed)}>Show only completed</button>
+                        <button onClick={event => this.onFilterClick(event, Filter.Uncompleted)}>Show only uncompleted</button>
+                        <button onClick={event => this.onFilterClick(event, Filter.ShowAll)}>Show all</button>
+                    </div>
                 </div>
             </div>
         );
