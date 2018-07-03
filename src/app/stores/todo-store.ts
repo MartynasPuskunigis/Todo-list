@@ -1,6 +1,13 @@
 import { ReduceStore, ActionHandler } from "simplr-flux";
 
-import { TodoAddAction, TodoDeleteAction, TodoCompletionChangedAction, FilterChangedAction } from "./../actions/todo-actions";
+import {
+    TodoAddAction,
+    TodoDeleteAction,
+    TodoCompletionChangedAction,
+    FilterChangedAction,
+    CheckboxClickedAction,
+    DeleteCheckedAction
+} from "./../actions/todo-actions";
 
 import { Task } from "./../contracts/Task";
 import { Filter } from "../components/input-view";
@@ -9,6 +16,7 @@ interface StoreState {
     allTasks: Task[];
     tasksToShow: Task[];
     currentFilter: Filter;
+    checkedBoxesIds: number[];
 }
 
 class TodoReduceStoreClass extends ReduceStore<StoreState> {
@@ -18,6 +26,8 @@ class TodoReduceStoreClass extends ReduceStore<StoreState> {
         this.registerAction(TodoDeleteAction, this.onDeleteTodo);
         this.registerAction(TodoCompletionChangedAction, this.onTodoCompletionChanged);
         this.registerAction(FilterChangedAction, this.onFilterChanged);
+        this.registerAction(CheckboxClickedAction, this.onCheckboxClicked);
+        this.registerAction(DeleteCheckedAction, this.onDeleteCheckedClicked);
     }
 
     private onAddTodo: ActionHandler<TodoAddAction, StoreState> = (action, state) => {
@@ -29,7 +39,7 @@ class TodoReduceStoreClass extends ReduceStore<StoreState> {
         };
         const nextState: StoreState = {
             ...state,
-            allTasks: [...state.allTasks, newTask]
+            allTasks: [newTask, ...state.allTasks]
         };
         return TodoReduceStoreClass.calculateState(nextState);
     };
@@ -66,6 +76,37 @@ class TodoReduceStoreClass extends ReduceStore<StoreState> {
         return TodoReduceStoreClass.calculateState(nextState);
     };
 
+    protected onCheckboxClicked: ActionHandler<CheckboxClickedAction, StoreState> = (action, state) => {
+        const nextState: StoreState = {
+            ...state,
+        };
+        if (action.event.currentTarget.checked) {
+            nextState.checkedBoxesIds.unshift(action.taskId);
+        } else {
+            nextState.checkedBoxesIds = nextState.checkedBoxesIds.filter(item => item !== action.taskId);
+        }
+
+        return nextState;
+    };
+
+    protected onDeleteCheckedClicked: ActionHandler<DeleteCheckedAction, StoreState> = (action, state) => {
+        const nextState: StoreState = {
+            ...state,
+        };
+
+        nextState.allTasks = nextState.allTasks.filter(task => {
+            for (let i = 0; i < nextState.allTasks.length; i++) {
+                if (nextState.checkedBoxesIds.indexOf(task.id) === -1) {
+                    nextState.checkedBoxesIds = nextState.checkedBoxesIds.filter(item => item !== task.id);
+                    return true;
+                }
+            }
+            return;
+        });
+
+        return TodoReduceStoreClass.calculateState(nextState);
+    }
+
     protected static calculateState(state: StoreState): StoreState {
         switch (state.currentFilter) {
             case Filter.Uncompleted: {
@@ -88,7 +129,8 @@ class TodoReduceStoreClass extends ReduceStore<StoreState> {
         return {
             allTasks: [],
             tasksToShow: [],
-            currentFilter: Filter.ShowAll
+            currentFilter: Filter.ShowAll,
+            checkedBoxesIds: []
         };
     }
 

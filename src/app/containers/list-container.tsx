@@ -29,9 +29,14 @@ class TodoContainerClass extends React.Component<{}, State> {
         TodoActionsCreators.todoCompletionChanged(taskId);
     }
 
+    protected onCheckboxClick(event: React.MouseEvent<HTMLInputElement>, taskId: number): void {
+        TodoActionsCreators.todoCheckboxClicked(event, taskId);
+    }
+
     public render(): JSX.Element | JSX.Element[] {
         const todoTasks = this.state.tasks.map(task => (
             <div key={task.id}>
+                <div><input onClick={event => this.onCheckboxClick(event, task.id)} type="checkbox"/></div>
                 {task.isDone ? (
                     <div onClick={event => this.onTaskClick(event, task.id)}>
                         <del>{task.text}</del>

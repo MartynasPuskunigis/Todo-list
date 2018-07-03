@@ -56,6 +56,10 @@ export class InputView extends React.Component<{}, State> {
         TodoActionsCreators.filterClicked(filtertype);
     }
 
+    protected onDeleteCheckedClick: React.MouseEventHandler<HTMLButtonElement> = event => {
+        TodoActionsCreators.deleteCheckedClicked();
+    }
+
     public render(): JSX.Element {
         return (
             <div>
@@ -73,6 +77,7 @@ export class InputView extends React.Component<{}, State> {
                         <button onClick={event => this.onFilterClick(event, Filter.Completed)}>Show only completed</button>
                         <button onClick={event => this.onFilterClick(event, Filter.Uncompleted)}>Show only uncompleted</button>
                         <button onClick={event => this.onFilterClick(event, Filter.ShowAll)}>Show all</button>
+                        <button onClick={this.onDeleteCheckedClick}>Delete checked</button>
                     </div>
                 </div>
             </div>

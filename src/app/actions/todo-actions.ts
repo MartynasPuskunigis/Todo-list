@@ -28,3 +28,15 @@ export class FilterChangedAction {
         return this.filtertype;
     }
 }
+export class CheckboxClickedAction {
+    constructor(private checkevent: React.MouseEvent<HTMLInputElement>, private id: number) {}
+
+    public get event(): React.MouseEvent<HTMLInputElement> {
+        return this.checkevent;
+    }
+
+    public get taskId(): number {
+        return this.id;
+    }
+}
+export class DeleteCheckedAction { }
