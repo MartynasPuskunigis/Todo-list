@@ -4,29 +4,47 @@ import { Container } from "flux/utils";
 import { Task } from "./../contracts/Task";
 
 import { TodoReduceStore } from "./../stores/todo-store";
+import { TodoActionsCreators } from "./../actions/todo-actions-creators";
 
 interface State {
-    Tasks: Task[];
+    tasks: Task[];
 }
 
 class TodoContainerClass extends React.Component<{}, State> {
-    // public static getStores() {
-    //     return [TodoReduceStore];
-    // }
+    public static getStores(): Container.StoresList {
+        return [TodoReduceStore];
+    }
 
-    // public static calculateState(state: State): State {
-    //     return {
-    //         Tasks: TodoReduceStore.getState().allTasks
-    //     };
-    // }
+    public static calculateState(state: State): State {
+        return {
+            tasks: TodoReduceStore.getState().allTasks
+        };
+    }
 
-    public render(): JSX.Element {
-        const TodoTasks = this.state.Tasks.map(task => (
+    protected onDeleteClick(event: React.MouseEvent<HTMLButtonElement>, taskId: number): void {
+        TodoActionsCreators.todoDeleted(taskId);
+    }
+
+    protected onTaskClick(event: React.MouseEvent<HTMLDivElement>, taskId: number): void {
+        TodoActionsCreators.todoCompletionChanged(taskId);
+    }
+
+    public render(): JSX.Element | JSX.Element[] {
+        const todoTasks = this.state.tasks.map(task => (
             <div key={task.id}>
-                <div>{task.text}</div>
+                {task.isDone ? (
+                    <div onClick={event => this.onTaskClick(event, task.id)}>
+                        <del>{task.text}</del>
+                    </div>
+                ) : (
+                    <div onClick={event => this.onTaskClick(event, task.id)}>{task.text}</div>
+                )}
+                <div>
+                    <button onClick={event => this.onDeleteClick(event, task.id)}>X</button>
+                </div>
             </div>
         ));
-        return <div>{TodoTasks}</div>;
+        return <div>{todoTasks}</div>;
     }
 }
 export const TodoContainer = Container.create(TodoContainerClass);

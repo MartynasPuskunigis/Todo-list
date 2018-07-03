@@ -1,6 +1,6 @@
-import { ReduceStore } from "simplr-flux";
+import { ReduceStore, ActionHandler } from "simplr-flux";
 
-import { TodoAddAction } from "./../actions/todo-actions";
+import { TodoAddAction, TodoDeleteAction, TodoCompletionChangedAction } from "./../actions/todo-actions";
 
 import { Task } from "./../contracts/Task";
 
@@ -11,23 +11,46 @@ interface StoreState {
 class TodoReduceStoreClass extends ReduceStore<StoreState> {
     constructor() {
         super();
-        this.registerAction(TodoAddAction, this.onAddTodo.bind(this));
+        this.registerAction(TodoAddAction, this.onAddTodo);
+        this.registerAction(TodoDeleteAction, this.onDeleteTodo);
+        this.registerAction(TodoCompletionChangedAction, this.onTodoCompletionChanged);
     }
 
-    private onAddTodo(action: TodoAddAction, state: StoreState): StoreState {
-        const newId = Number(new Date().getTime);
+    private onAddTodo: ActionHandler<TodoAddAction, StoreState> = (action, state) => {
+        const newId = Number(new Date().getTime());
         const newTask = {
             id: newId,
-            text: action.Task,
+            text: action.tasktext,
             isDone: false
         };
 
-        state.allTasks.push(newTask);
+        return {
+            ...state,
+            allTasks: [...state.allTasks, newTask]
+        };
+    };
+
+    private onDeleteTodo: ActionHandler<TodoDeleteAction, StoreState> = (action, state) => {
+        const newTasks = state.allTasks.filter(item => item.id !== action.taskId);
 
         return {
-            allTasks: state.allTasks
+            ...state,
+            allTasks: newTasks
         };
-    }
+    };
+
+    private onTodoCompletionChanged: ActionHandler<TodoCompletionChangedAction, StoreState> = (action, state) => {
+        const newTasks = state.allTasks.map(item => item);
+        for (let i = 0; i < newTasks.length; i++) {
+            if (newTasks[i].id === action.taskId) {
+                newTasks[i].isDone = !newTasks[i].isDone;
+            }
+        }
+        return {
+            ...state,
+            allTasks: newTasks
+        };
+    };
 
     public getInitialState(): StoreState {
         return {

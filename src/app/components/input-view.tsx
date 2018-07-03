@@ -20,11 +20,29 @@ export class InputView extends React.Component<{}, State> {
         });
     };
 
-    protected onSubmitClick: React.MouseEventHandler<HTMLButtonElement> = event => {
-        if (this.state.currentInputValue.length === 0) {
+    protected addNewTodo(newTodoText: string): void {
+        if (newTodoText.length === 0) {
             alert("Hey! Write something!");
         } else {
-            TodoActionsCreators.TodoAdded(this.state.currentInputValue);
+            TodoActionsCreators.todoAdded(newTodoText);
+        }
+    }
+
+    protected resetInputText(): void {
+        this.setState({
+            currentInputValue: ""
+        });
+    }
+
+    protected onSubmitClick: React.MouseEventHandler<HTMLButtonElement> = event => {
+        this.addNewTodo(this.state.currentInputValue);
+        this.resetInputText();
+    };
+
+    protected handleKeyClick: React.KeyboardEventHandler<HTMLInputElement> = event => {
+        if (event.key === "Enter") {
+            this.addNewTodo(this.state.currentInputValue);
+            this.resetInputText();
         }
     };
 
@@ -32,10 +50,20 @@ export class InputView extends React.Component<{}, State> {
         return (
             <div>
                 <div>
-                    <input onChange={this.handleInputChange} placeholder="Add a task..." />
+                    <input
+                        onChange={this.handleInputChange}
+                        onKeyPress={this.handleKeyClick}
+                        placeholder="Add a task..."
+                        value={this.state.currentInputValue}
+                    />
                 </div>
                 <div>
                     <button onClick={this.onSubmitClick}>Submit</button>
+                    <div>
+                        <button>Show only completed</button>
+                        <button>Show only uncompleted</button>
+                        <button>Show all</button>
+                        </div>
                 </div>
             </div>
         );
